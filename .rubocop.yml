@@ -1,0 +1,21 @@
+AllCops:
+  Exclude:
+    - 'db/**'
+    - 'vendor/**/*'
+    - 'db/migrate/**'
+    - 'Gemfile'
+    - 'config/environments/**'
+    - 'config/initializers/**'
+    - 'config/**'
+    - 'bin/**'
+    - config.ru
+    - Rakefile
+    - spec/spec_helper.rb
+    - spec/rails_helper.rb
+    - app/mailers/**
+    - app/jobs/application_job.rb
+    - app/channels/application_cable/*
+Style/Documentation:
+  Enabled: false
+Metrics/BlockLength:
+  IgnoredMethods: ['describe', 'context']
