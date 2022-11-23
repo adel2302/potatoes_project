@@ -55,7 +55,7 @@ RSpec.describe 'StockPrices', type: :request do
       it 'returns array correctly ordered' do
         get '/stock_prices/search', headers: valid_headers, params: { stock_price: valid_attribute }
         rsp = JSON.parse response.body
-        expect(rsp.first['time']).to be > rsp.last['time']
+        expect(rsp.first['time']).to be < rsp.last['time']
       end
 
       it 'returns array of yesterday stock price when day missing' do
