@@ -49,6 +49,7 @@ group :development, :test do
   gem 'bundler-audit' # CI
   gem 'ruby_audit' # CI
   gem 'brakeman' # CI
+  gem 'timecop'
 end
 
 group :development do
