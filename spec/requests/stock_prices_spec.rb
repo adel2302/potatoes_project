@@ -82,4 +82,25 @@ RSpec.describe 'StockPrices', type: :request do
       end
     end
   end
+
+  describe 'GET /simulation' do
+    context 'with valid parameter' do
+      it 'returns http success' do
+        get '/stock_prices/simulation', headers: valid_headers, params: { stock_price: valid_attribute }
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'returns the right gain' do
+        get '/stock_prices/simulation', headers: valid_headers, params: { stock_price: valid_attribute }
+        rsp = JSON.parse response.body
+        expect(rsp['gain']).to eq('300.0€')
+      end
+
+      it 'returns 0€ when stock price not exist for a particular day' do
+        get '/stock_prices/simulation', headers: valid_headers, params: { stock_price: { day: '01/01/1900' } }
+        rsp = JSON.parse response.body
+        expect(rsp['gain']).to eq('0.0€')
+      end
+    end
+  end
 end

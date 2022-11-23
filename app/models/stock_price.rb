@@ -11,11 +11,31 @@ class StockPrice < ApplicationRecord
       search_range(day).order(created_at: :desc)
     end
 
+    def gain(day)
+      day = DateFormatter.parse(day)
+      values = search_range(day).order(created_at: :asc)
+      ary =  values.present? ? minmax_ary(values) : [0.0, 0.0]
+      Hash[gain: "#{Calculator.difference(ary)}€"]
+    end
+
     private
 
     def parsed_date(day)
       day = (Time.now - 1.day).strftime('%d/%m/%Y') unless day.present?
       DateTime.parse(day)
+    end
+
+    def minmax_ary(values)
+      first_value = values.first.value
+      ary = [first_value, first_value]
+      values.each do |v|
+        if v.value < ary[0]
+          ary[0] = v.value
+        elsif v.value > ary[1]
+          ary[1] = v.value
+        end
+      end
+      ary
     end
   end
 

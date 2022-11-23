@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe 'Users', type: :request do
   let(:valid_attributes) do
     {
-      login: Faker::String.random(length: 6..15),
-      password: Faker::String.random(length: 6..15)
+      login: Faker::Lorem.characters(number: 6..15),
+      password: Faker::Lorem.characters(number: 6..15)
     }
   end
 

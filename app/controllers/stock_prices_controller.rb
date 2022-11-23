@@ -14,6 +14,10 @@ class StockPricesController < ApplicationController
     end
   end
 
+  def simulation
+    render json: StockPrice.gain(@day), status: :ok
+  end
+
   private
 
   def day
