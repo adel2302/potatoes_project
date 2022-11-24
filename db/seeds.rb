@@ -1,7 +1,24 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+# Today
+value = 97
+1.upto(5) do |i|
+  Timecop.freeze(Time.now.beginning_of_day + i .hours) do
+    StockPrice.create(value: value)
+    value += i
+  end
+end
+
+# Yesterday
+1.upto(5) do |i|
+  Timecop.freeze(Time.now.beginning_of_day - 1.day + i .hours) do
+    StockPrice.create(value: value)
+    value += i
+  end
+end
+
+# Two days ago
+1.upto(5) do |i|
+  Timecop.freeze(Time.now.beginning_of_day - 2.days + i .hours) do
+    StockPrice.create(value: value)
+    value += i
+  end
+end

@@ -24,7 +24,7 @@ class Order < ApplicationRecord
   def at_max_quantity?(user_id)
     now = Time.now
     quantities = Order.where(created_at: (now.beginning_of_day..now.end_of_day), user_id:).pluck(:quantity)
-    quantities.present? && (count_ton(quantities) > 100) ? true : false
+    (quantities.present? && (count_ton(quantities) > 100)) || quantity > 100 ? true : false
   end
 
   def count_ton(quantities)
