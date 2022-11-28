@@ -62,14 +62,17 @@ RSpec.describe 'Orders', type: :request do
           end
         end
 
-        context 'when quatity order exceed ptt in wallet' do
-          it 'creates a new Order' do
+        context 'when quantity order exceed ptt in wallet' do
+          it 'does not creates a new Order' do
+            expect(@user.wallets.currency_ptt.first.available).to be < 100
             valid_attribute[:quantity] = 100
             post orders_url,
                  params: { order: valid_attribute },
                  headers: valid_headers, as: :json
             expect(response).to have_http_status(:unprocessable_entity)
             expect(response.content_type).to include('application/json')
+            rsp = JSON.parse(response.body)
+            expect(rsp['errors'].first).to eql('Error insufficient PTT')
           end
         end
       end

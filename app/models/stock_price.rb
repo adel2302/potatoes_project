@@ -26,17 +26,38 @@ class StockPrice < ApplicationRecord
       DateTime.parse(day)
     end
 
+    # rubocop:disable Metrics/MethodLength
     def minmax_ary(values)
       first_value = values.first.value
-      ary = [first_value, first_value]
-      values.each do |v|
-        if v.value < ary[0]
-          ary[0] = v.value
-        elsif v.value > ary[1]
-          ary[1] = v.value
+      values_with_index = [[first_value, 0], [first_value, 0]]
+      values.each do |element|
+        element_index = values.find_index(element)
+        smallest_value(values, element, values_with_index, element_index)
+        biggest_value(element, values_with_index, element_index)
+      end
+      if values_with_index[0][1] < values_with_index[1][1]
+        [values_with_index[0][0],
+         values_with_index[1][0]]
+      else
+        [0.0, 0.0]
+      end
+    end
+    # rubocop:enable Metrics/MethodLength
+
+    def smallest_value(values, element, values_with_index, element_index)
+      values[element_index..].each do |v|
+        if element.value <= v.value && element.value <= values_with_index[0][0]
+          values_with_index[0][0] = element.value
+          values_with_index[0][1] = element_index
         end
       end
-      ary
+    end
+
+    def biggest_value(element, values_with_index, element_index)
+      return unless element.value >= values_with_index[1][0]
+
+      values_with_index[1][0] = element.value
+      values_with_index[1][1] = element_index
     end
   end
 

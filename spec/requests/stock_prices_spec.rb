@@ -84,6 +84,15 @@ RSpec.describe 'StockPrices', type: :request do
   end
 
   describe 'GET /simulation' do
+    before do
+      [120, 119, 118].each do |p|
+        Timecop.freeze(Time.now - 5.days) do
+          FactoryBot.create(:stock_price, value: p)
+        end
+      end
+      @date_parsed = (Time.now - 5.days).strftime('%d/%m/%Y')
+    end
+
     context 'with valid parameter' do
       it 'returns http success' do
         get '/stock_prices/simulation', headers: valid_headers, params: { stock_price: valid_attribute }
@@ -96,7 +105,13 @@ RSpec.describe 'StockPrices', type: :request do
         expect(rsp['gain']).to eq('300.0€')
       end
 
-      it 'returns 0€ when stock price not exist for a particular day' do
+      it 'returns 0.0€ when stock price exist for a particular day but without no gain' do
+        get '/stock_prices/simulation', headers: valid_headers, params: { stock_price: { day: @date_parsed } }
+        rsp = JSON.parse response.body
+        expect(rsp['gain']).to eq('0.0€')
+      end
+
+      it 'returns 0.0€ when stock price not exist for a particular day' do
         get '/stock_prices/simulation', headers: valid_headers, params: { stock_price: { day: '01/01/1900' } }
         rsp = JSON.parse response.body
         expect(rsp['gain']).to eq('0.0€')
